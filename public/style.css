@@ -1,0 +1,302 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    --hyrox-red: #E63946;
+    --hyrox-dark: #1D3557;
+    --hyrox-blue: #457B9D;
+    --hyrox-light: #F1FAEE;
+    --hyrox-accent: #A8DADC;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+    background: linear-gradient(135deg, var(--hyrox-dark) 0%, var(--hyrox-blue) 100%);
+    min-height: 100vh;
+    color: var(--hyrox-dark);
+    padding: 20px;
+}
+
+.container {
+    max-width: 900px;
+    margin: 0 auto;
+    background: white;
+    border-radius: 20px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    overflow: hidden;
+}
+
+header {
+    background: linear-gradient(135deg, var(--hyrox-red) 0%, #C1121F 100%);
+    color: white;
+    padding: 40px 30px;
+    text-align: center;
+}
+
+header h1 {
+    font-size: 2.5rem;
+    margin-bottom: 10px;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.subtitle {
+    font-size: 1.1rem;
+    opacity: 0.95;
+}
+
+main {
+    padding: 40px 30px;
+}
+
+.input-section {
+    margin-bottom: 30px;
+}
+
+.input-group {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+#hyroxUrl {
+    flex: 1;
+    min-width: 250px;
+    padding: 15px 20px;
+    border: 2px solid var(--hyrox-accent);
+    border-radius: 10px;
+    font-size: 1rem;
+    transition: border-color 0.3s;
+}
+
+#hyroxUrl:focus {
+    outline: none;
+    border-color: var(--hyrox-blue);
+}
+
+#submitBtn {
+    padding: 15px 30px;
+    background: var(--hyrox-red);
+    color: white;
+    border: none;
+    border-radius: 10px;
+    font-size: 1rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.3s, transform 0.1s;
+}
+
+#submitBtn:hover {
+    background: #C1121F;
+    transform: translateY(-2px);
+}
+
+#submitBtn:active {
+    transform: translateY(0);
+}
+
+#submitBtn:disabled {
+    background: #ccc;
+    cursor: not-allowed;
+    transform: none;
+}
+
+.loading {
+    text-align: center;
+    padding: 40px;
+}
+
+.spinner {
+    border: 4px solid var(--hyrox-accent);
+    border-top: 4px solid var(--hyrox-red);
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    animation: spin 1s linear infinite;
+    margin: 0 auto 20px;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.error {
+    background: #fee;
+    border: 2px solid var(--hyrox-red);
+    color: var(--hyrox-red);
+    padding: 15px 20px;
+    border-radius: 10px;
+    margin: 20px 0;
+}
+
+.results {
+    animation: fadeIn 0.5s;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.athlete-info {
+    background: var(--hyrox-light);
+    padding: 25px;
+    border-radius: 10px;
+    margin-bottom: 30px;
+}
+
+.athlete-info h2 {
+    color: var(--hyrox-red);
+    margin-bottom: 20px;
+    font-size: 1.8rem;
+}
+
+.stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 15px;
+}
+
+.stat {
+    background: white;
+    padding: 15px;
+    border-radius: 8px;
+    text-align: center;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.stat-label {
+    display: block;
+    font-size: 0.9rem;
+    color: var(--hyrox-blue);
+    margin-bottom: 5px;
+    font-weight: 600;
+}
+
+.stat-value {
+    display: block;
+    font-size: 1.5rem;
+    color: var(--hyrox-dark);
+    font-weight: bold;
+}
+
+.roast-section {
+    margin-bottom: 30px;
+}
+
+.roast-section h3 {
+    color: var(--hyrox-dark);
+    margin-bottom: 15px;
+    font-size: 1.5rem;
+}
+
+.roast-text {
+    background: #fff9e6;
+    border-left: 4px solid var(--hyrox-red);
+    padding: 20px;
+    border-radius: 8px;
+    font-size: 1.1rem;
+    line-height: 1.8;
+    color: var(--hyrox-dark);
+    white-space: pre-wrap;
+}
+
+.share-section {
+    margin-top: 30px;
+    padding-top: 30px;
+    border-top: 2px solid var(--hyrox-accent);
+}
+
+.share-section h3 {
+    color: var(--hyrox-dark);
+    margin-bottom: 15px;
+    font-size: 1.5rem;
+}
+
+.share-buttons {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-bottom: 20px;
+}
+
+.share-btn {
+    padding: 12px 20px;
+    background: var(--hyrox-blue);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 0.95rem;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-block;
+    transition: background 0.3s, transform 0.1s;
+    font-weight: 600;
+}
+
+.share-btn:hover {
+    background: var(--hyrox-dark);
+    transform: translateY(-2px);
+}
+
+.share-btn:active {
+    transform: translateY(0);
+}
+
+.share-card-container {
+    margin-top: 20px;
+    text-align: center;
+    background: var(--hyrox-light);
+    padding: 20px;
+    border-radius: 10px;
+}
+
+.share-card {
+    max-width: 100%;
+    height: auto;
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+footer {
+    background: var(--hyrox-dark);
+    color: white;
+    text-align: center;
+    padding: 20px;
+    font-size: 0.9rem;
+}
+
+.hidden {
+    display: none;
+}
+
+@media (max-width: 768px) {
+    header h1 {
+        font-size: 2rem;
+    }
+    
+    .input-group {
+        flex-direction: column;
+    }
+    
+    #hyroxUrl, #submitBtn {
+        width: 100%;
+    }
+    
+    .stats {
+        grid-template-columns: 1fr;
+    }
+    
+    .share-buttons {
+        flex-direction: column;
+    }
+    
+    .share-btn {
+        width: 100%;
+        text-align: center;
+    }
+}
+

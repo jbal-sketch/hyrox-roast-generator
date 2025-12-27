@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hyrox Roast Generator</title>
+    <link rel="stylesheet" href="style.css">
+    <meta property="og:title" content="Hyrox Roast Generator">
+    <meta property="og:description" content="Get a hilarious roast of your Hyrox performance">
+    <meta property="og:type" content="website">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🔥 Hyrox Roast Generator 🔥</h1>
+            <p class="subtitle">Paste your Hyrox results URL and get roasted (in a fun way!)</p>
+        </header>
+
+        <main>
+            <div class="input-section">
+                <form id="roastForm">
+                    <div class="input-group">
+                        <input 
+                            type="url" 
+                            id="hyroxUrl" 
+                            placeholder="https://www.hyresult.com/result/YOUR_RESULT_ID"
+                            required
+                        >
+                        <button type="submit" id="submitBtn">Get Roasted 🔥</button>
+                    </div>
+                </form>
+            </div>
+
+            <div id="loading" class="loading hidden">
+                <div class="spinner"></div>
+                <p>Scraping your results and generating your roast...</p>
+            </div>
+
+            <div id="error" class="error hidden"></div>
+
+            <div id="results" class="results hidden">
+                <div class="athlete-info">
+                    <h2 id="athleteName"></h2>
+                    <div class="stats">
+                        <div class="stat">
+                            <span class="stat-label">Total Time</span>
+                            <span class="stat-value" id="totalTime"></span>
+                        </div>
+                        <div class="stat">
+                            <span class="stat-label">Overall Position</span>
+                            <span class="stat-value" id="overallPosition"></span>
+                        </div>
+                        <div class="stat">
+                            <span class="stat-label">Category Position</span>
+                            <span class="stat-value" id="categoryPosition"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="roast-section">
+                    <h3>Your Roast:</h3>
+                    <div class="roast-text" id="roastText"></div>
+                </div>
+
+                <div class="share-section">
+                    <h3>Share Your Roast:</h3>
+                    <div class="share-buttons">
+                        <button id="downloadImage" class="share-btn">📥 Download Image</button>
+                        <button id="copyText" class="share-btn">📋 Copy Text</button>
+                        <a id="twitterShare" class="share-btn" target="_blank" rel="noopener noreferrer">🐦 Share on Twitter</a>
+                        <a id="facebookShare" class="share-btn" target="_blank" rel="noopener noreferrer">📘 Share on Facebook</a>
+                    </div>
+                    <div id="shareCardContainer" class="share-card-container">
+                        <canvas id="shareCard" class="share-card"></canvas>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <footer>
+            <p>Made with 🔥 for the Hyrox community</p>
+        </footer>
+    </div>
+
+    <script src="share-card.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
+
