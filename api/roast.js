@@ -1,14 +1,6 @@
-const express = require('express');
-const cors = require('cors');
 const axios = require('axios');
 const cheerio = require('cheerio');
 const { GoogleGenerativeAI } = require('@google/generative-ai');
-
-const app = express();
-
-// Middleware
-app.use(cors());
-app.use(express.json());
 
 // Initialize Gemini
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
@@ -173,7 +165,6 @@ function generatePrompt(data) {
   // Find slowest split if available
   const slowestSplit = data.splits.length > 0 
     ? data.splits.reduce((slowest, current) => {
-        // Simple comparison - could be improved with proper time parsing
         return current.time > slowest.time ? current : slowest;
       }, data.splits[0])
     : null;
@@ -217,8 +208,23 @@ async function generateRoast(prompt) {
   }
 }
 
-// API endpoint
-app.post('/api/roast', async (req, res) => {
+// Vercel serverless function handler
+module.exports = async (req, res) => {
+  // Enable CORS
+  res.setHeader('Access-Control-Allow-Credentials', true);
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Methods', 'GET,OPTIONS,PATCH,DELETE,POST,PUT');
+  res.setHeader('Access-Control-Allow-Headers', 'X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version');
+
+  if (req.method === 'OPTIONS') {
+    res.status(200).end();
+    return;
+  }
+
+  if (req.method !== 'POST') {
+    return res.status(405).json({ error: 'Method not allowed' });
+  }
+
   try {
     const { url } = req.body;
     
@@ -254,17 +260,8 @@ app.post('/api/roast', async (req, res) => {
   } catch (error) {
     console.error('Error:', error);
     res.status(500).json({ 
-      error: error.message || 'Failed to generate roast',
-      details: process.env.NODE_ENV === 'development' ? error.stack : undefined
+      error: error.message || 'Failed to generate roast'
     });
   }
-});
-
-// Health check
-app.get('/api/health', (req, res) => {
-  res.json({ status: 'ok' });
-});
-
-// Export for Vercel
-module.exports = app;
+};
 
