@@ -3,10 +3,12 @@
     {
       "source": "/api/(.*)",
       "destination": "/api/$1"
-    },
+    }
+  ],
+  "routes": [
     {
-      "source": "/(.*)",
-      "destination": "/public/$1"
+      "src": "/(.*)",
+      "dest": "/public/$1"
     }
   ]
 }
