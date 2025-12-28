@@ -315,6 +315,44 @@ footer {
     display: none;
 }
 
+.ad-section {
+    background: var(--hyrox-light);
+    padding: 30px;
+    border-radius: 10px;
+    margin: 20px 0;
+    animation: fadeIn 0.5s;
+    text-align: center;
+}
+
+.ad-section h3 {
+    color: var(--hyrox-dark);
+    margin-bottom: 10px;
+    font-size: 1.5rem;
+}
+
+.ad-info {
+    color: var(--hyrox-blue);
+    margin-bottom: 20px;
+    font-size: 1rem;
+}
+
+.adsense-container {
+    margin: 20px auto;
+    min-height: 250px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: white;
+    border: 2px solid var(--hyrox-accent);
+    border-radius: 10px;
+    padding: 20px;
+}
+
+.adsense-container ins {
+    display: block;
+    margin: 0 auto;
+}
+
 /* Responsive Design */
 @media (max-width: 768px) {
     header {

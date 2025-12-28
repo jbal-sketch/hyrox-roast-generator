@@ -252,14 +252,10 @@ module.exports = async (req, res) => {
   }
 
   try {
-    const { url, paymentIntentId } = req.body;
+    const { url } = req.body;
     
     if (!url) {
       return res.status(400).json({ error: 'URL is required' });
-    }
-    
-    if (!paymentIntentId) {
-      return res.status(400).json({ error: 'Payment intent ID is required' });
     }
     
     if (!url.includes('hyresult.com')) {
@@ -268,22 +264,6 @@ module.exports = async (req, res) => {
     
     if (!process.env.GEMINI_API_KEY) {
       return res.status(500).json({ error: 'Gemini API key not configured' });
-    }
-    
-    // Verify payment before generating roast
-    try {
-      const paymentIntent = await stripe.paymentIntents.retrieve(paymentIntentId);
-      
-      if (paymentIntent.status !== 'succeeded') {
-        return res.status(400).json({ 
-          error: 'Payment not completed. Please complete payment first.',
-          status: paymentIntent.status
-        });
-      }
-    } catch (stripeError) {
-      return res.status(400).json({ 
-        error: 'Invalid payment. Please complete payment first.'
-      });
     }
     
     // Scrape results

@@ -4,6 +4,13 @@ const submitBtn = document.getElementById('submitBtn');
 const loading = document.getElementById('loading');
 const error = document.getElementById('error');
 const results = document.getElementById('results');
+const adSection = document.getElementById('ad-section');
+const adSenseContainer = document.getElementById('adsense-container');
+
+// Store URL for later use
+let pendingUrl = null;
+let adObserver = null;
+let roastGenerated = false;
 
 form.addEventListener('submit', async (e) => {
     e.preventDefault();
@@ -15,11 +22,102 @@ form.addEventListener('submit', async (e) => {
         return;
     }
     
+    if (!url.includes('hyresult.com')) {
+        showError('Please enter a valid Hyrox results URL');
+        return;
+    }
+    
+    pendingUrl = url;
+    roastGenerated = false;
+    
     // Hide previous results and errors
     results.classList.add('hidden');
     error.classList.add('hidden');
+    form.classList.add('hidden');
+    
+    // Show ad section
+    adSection.classList.remove('hidden');
+    adSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    
+    // Initialize AdSense ad
+    initializeAdSense();
+});
+
+function initializeAdSense() {
+    try {
+        // Push ad to AdSense
+        (adsbygoogle = window.adsbygoogle || []).push({});
+        
+        // Wait a moment for ad to start loading, then set up visibility observer
+        setTimeout(() => {
+            setupAdVisibilityObserver();
+        }, 500);
+    } catch (err) {
+        console.error('Error initializing AdSense:', err);
+        // If AdSense fails, proceed with roast generation anyway
+        setTimeout(() => {
+            generateRoast(pendingUrl);
+        }, 2000);
+    }
+}
+
+function setupAdVisibilityObserver() {
+    // Use Intersection Observer to detect when ad is visible
+    if (!('IntersectionObserver' in window)) {
+        // Fallback for browsers without IntersectionObserver
+        setTimeout(() => {
+            if (!roastGenerated) {
+                generateRoast(pendingUrl);
+            }
+        }, 3000);
+        return;
+    }
+    
+    // Find the ad iframe or container
+    const adElement = adSenseContainer.querySelector('ins.adsbygoogle') || 
+                     adSenseContainer.querySelector('iframe') ||
+                     adSenseContainer;
+    
+    adObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting && entry.intersectionRatio > 0.1) {
+                // Ad is visible, wait a moment then generate roast
+                if (!roastGenerated) {
+                    roastGenerated = true;
+                    setTimeout(() => {
+                        generateRoast(pendingUrl);
+                    }, 1000); // Give user a moment to see the ad
+                    
+                    // Disconnect observer after first trigger
+                    if (adObserver) {
+                        adObserver.disconnect();
+                    }
+                }
+            }
+        });
+    }, {
+        threshold: 0.1 // Trigger when 10% of ad is visible
+    });
+    
+    adObserver.observe(adElement);
+    
+    // Fallback: if ad doesn't become visible within 10 seconds, generate anyway
+    setTimeout(() => {
+        if (!roastGenerated) {
+            roastGenerated = true;
+            if (adObserver) {
+                adObserver.disconnect();
+            }
+            generateRoast(pendingUrl);
+        }
+    }, 10000);
+}
+
+async function generateRoast(url) {
+    // Hide ad section and show loading
+    adSection.classList.add('hidden');
     loading.classList.remove('hidden');
-    submitBtn.disabled = true;
+    error.classList.add('hidden');
     
     try {
         const response = await fetch('/api/roast', {
@@ -42,13 +140,15 @@ form.addEventListener('submit', async (e) => {
         showError(err.message || 'Something went wrong. Please try again.');
     } finally {
         loading.classList.add('hidden');
-        submitBtn.disabled = false;
+        form.classList.remove('hidden');
     }
-});
+}
 
 function showError(message) {
     error.textContent = message;
     error.classList.remove('hidden');
+    adSection.classList.add('hidden');
+    form.classList.remove('hidden');
 }
 
 function displayResults(data) {
@@ -132,4 +232,3 @@ function setupSharing(data) {
         }
     }, 100);
 }
-
