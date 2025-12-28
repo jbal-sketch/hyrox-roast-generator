@@ -61,6 +61,11 @@ main {
     align-items: flex-start;
 }
 
+/* Mobile sidebar - hidden on desktop */
+.sidebar-mobile {
+    display: none;
+}
+
 .content-area {
     flex: 1;
     min-width: 0; /* Prevents flex item from overflowing */
@@ -433,8 +438,33 @@ footer {
         font-size: 1rem;
     }
     
-    main {
+    .main-content-wrapper {
+        flex-direction: column;
         padding: 1.5rem 1rem;
+    }
+    
+    .sidebar {
+        display: none;
+    }
+    
+    .content-area {
+        width: 100%;
+    }
+    
+    /* Show mobile sidebar after input section */
+    .input-section {
+        margin-bottom: 2rem;
+    }
+    
+    .sidebar-mobile {
+        display: block;
+        width: 100%;
+        margin-bottom: 2rem;
+    }
+    
+    .sidebar-mobile .sidebar-content {
+        position: static;
+        margin-top: 0;
     }
     
     .input-group {

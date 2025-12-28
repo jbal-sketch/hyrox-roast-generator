@@ -70,8 +70,6 @@ function displayResults(data) {
     // Display athlete info
     document.getElementById('athleteName').textContent = data.data.athleteName || 'Unknown Athlete';
     document.getElementById('totalTime').textContent = data.data.totalTime || 'N/A';
-    document.getElementById('overallPosition').textContent = `#${data.data.overallPosition}`;
-    document.getElementById('categoryPosition').textContent = `#${data.data.categoryPosition}`;
     
     // Display roast
     document.getElementById('roastText').textContent = data.roast;

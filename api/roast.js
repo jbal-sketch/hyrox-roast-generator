@@ -202,8 +202,6 @@ function generatePrompt(data) {
 ATHLETE PERFORMANCE DATA:
 - Name: ${data.athleteName}
 - Total Time: ${data.totalTime}
-- Overall Position: #${data.overallPosition} (out of all competitors)
-- Category Position: #${data.categoryPosition} (in their category)
 
 WORKOUT SPLITS:
 ${splitsText}
@@ -212,7 +210,7 @@ ${slowestText}
 INSTRUCTIONS:
 1. Create a humorous, playful roast (1-2 SHORT paragraphs, keep it concise and punchy)
 2. Be witty and funny, but keep it light-hearted and constructive
-3. Point out interesting aspects like slowest splits, position relative to field size
+3. Point out interesting aspects like slowest splits and time performance
 4. Make playful jokes about their performance - like a friendly banter between training partners
 5. Keep it shareable and entertaining for social media - SHORT and snappy is better
 6. Don't be mean-spirited or overly harsh - this should be fun and motivating
