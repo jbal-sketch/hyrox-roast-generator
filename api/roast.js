@@ -1,7 +1,6 @@
 const axios = require('axios');
 const cheerio = require('cheerio');
 const { GoogleGenerativeAI } = require('@google/generative-ai');
-const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 
 // Initialize Gemini
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
@@ -43,30 +42,46 @@ async function scrapeHyroxResults(url) {
       athleteName = 'Unknown Athlete';
     }
     
-    // Extract overall position - look for position/rank indicators
+    // Extract overall position - look for pattern like "#1032 of 1481"
     let overallPosition = 'Unknown';
-    const positionText = $('*:contains("Position")').first().text() || 
-                        $('*:contains("Overall")').first().text() ||
-                        $('*:contains("Rank")').first().text();
-    const positionMatch = positionText.match(/#?\s*(\d+)/i) || 
-                         positionText.match(/position\s*:?\s*(\d+)/i) ||
-                         positionText.match(/rank\s*:?\s*(\d+)/i);
-    if (positionMatch) {
-      overallPosition = positionMatch[1];
+    // Try to find text with pattern "#number of number" or "#number"
+    const allText = $('body').text();
+    // Look for pattern: #number of number (e.g., #1032 of 1481)
+    const overallMatch = allText.match(/#(\d+)\s+of\s+\d+/i) || 
+                        allText.match(/#(\d+)\s*$/m) ||
+                        allText.match(/position[:\s]*#?(\d+)/i);
+    if (overallMatch) {
+      overallPosition = overallMatch[1];
     } else {
-      // Try data attributes
-      overallPosition = $('[data-position], [data-rank], .position, .rank').first().text().trim().replace(/\D/g, '') || 'Unknown';
+      // Try looking for h2 or large text elements that might contain position
+      $('h2, h3, .position, [class*="position"], [class*="rank"]').each((i, el) => {
+        const text = $(el).text();
+        const match = text.match(/#(\d+)\s+of\s+\d+/i) || text.match(/#(\d+)/);
+        if (match && overallPosition === 'Unknown') {
+          overallPosition = match[1];
+          return false; // break
+        }
+      });
     }
     
-    // Extract category position
+    // Extract category/age group position - look for pattern like "#81 in AG 45-49"
     let categoryPosition = 'Unknown';
-    const categoryText = $('*:contains("Category")').first().text();
-    const categoryMatch = categoryText.match(/#?\s*(\d+)/i) || 
-                         categoryText.match(/category\s*:?\s*(\d+)/i);
+    // Look for pattern: #number in AG or #number in category
+    const categoryMatch = allText.match(/#(\d+)\s+in\s+AG/i) ||
+                         allText.match(/#(\d+)\s+in\s+[A-Z]{2}\s+\d+/i) ||
+                         allText.match(/age\s+group[:\s]*#?(\d+)/i);
     if (categoryMatch) {
       categoryPosition = categoryMatch[1];
     } else {
-      categoryPosition = $('[data-category-position], .category-position').first().text().trim().replace(/\D/g, '') || 'Unknown';
+      // Try looking in specific elements
+      $('h2, h3, .category, [class*="category"], [class*="age"]').each((i, el) => {
+        const text = $(el).text();
+        const match = text.match(/#(\d+)\s+in\s+AG/i) || text.match(/#(\d+)\s+in/i);
+        if (match && categoryPosition === 'Unknown') {
+          categoryPosition = match[1];
+          return false; // break
+        }
+      });
     }
     
     // Extract total time

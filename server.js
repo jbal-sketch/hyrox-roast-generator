@@ -4,7 +4,6 @@ const cors = require('cors');
 const axios = require('axios');
 const cheerio = require('cheerio');
 const { GoogleGenerativeAI } = require('@google/generative-ai');
-const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -54,30 +53,46 @@ async function scrapeHyroxResults(url) {
       athleteName = 'Unknown Athlete';
     }
     
-    // Extract overall position - look for position/rank indicators
+    // Extract overall position - look for pattern like "#1032 of 1481"
     let overallPosition = 'Unknown';
-    const positionText = $('*:contains("Position")').first().text() || 
-                        $('*:contains("Overall")').first().text() ||
-                        $('*:contains("Rank")').first().text();
-    const positionMatch = positionText.match(/#?\s*(\d+)/i) || 
-                         positionText.match(/position\s*:?\s*(\d+)/i) ||
-                         positionText.match(/rank\s*:?\s*(\d+)/i);
-    if (positionMatch) {
-      overallPosition = positionMatch[1];
+    // Try to find text with pattern "#number of number" or "#number"
+    const allText = $('body').text();
+    // Look for pattern: #number of number (e.g., #1032 of 1481)
+    const overallMatch = allText.match(/#(\d+)\s+of\s+\d+/i) || 
+                        allText.match(/#(\d+)\s*$/m) ||
+                        allText.match(/position[:\s]*#?(\d+)/i);
+    if (overallMatch) {
+      overallPosition = overallMatch[1];
     } else {
-      // Try data attributes
-      overallPosition = $('[data-position], [data-rank], .position, .rank').first().text().trim().replace(/\D/g, '') || 'Unknown';
+      // Try looking for h2 or large text elements that might contain position
+      $('h2, h3, .position, [class*="position"], [class*="rank"]').each((i, el) => {
+        const text = $(el).text();
+        const match = text.match(/#(\d+)\s+of\s+\d+/i) || text.match(/#(\d+)/);
+        if (match && overallPosition === 'Unknown') {
+          overallPosition = match[1];
+          return false; // break
+        }
+      });
     }
     
-    // Extract category position
+    // Extract category/age group position - look for pattern like "#81 in AG 45-49"
     let categoryPosition = 'Unknown';
-    const categoryText = $('*:contains("Category")').first().text();
-    const categoryMatch = categoryText.match(/#?\s*(\d+)/i) || 
-                         categoryText.match(/category\s*:?\s*(\d+)/i);
+    // Look for pattern: #number in AG or #number in category
+    const categoryMatch = allText.match(/#(\d+)\s+in\s+AG/i) ||
+                         allText.match(/#(\d+)\s+in\s+[A-Z]{2}\s+\d+/i) ||
+                         allText.match(/age\s+group[:\s]*#?(\d+)/i);
     if (categoryMatch) {
       categoryPosition = categoryMatch[1];
     } else {
-      categoryPosition = $('[data-category-position], .category-position').first().text().trim().replace(/\D/g, '') || 'Unknown';
+      // Try looking in specific elements
+      $('h2, h3, .category, [class*="category"], [class*="age"]').each((i, el) => {
+        const text = $(el).text();
+        const match = text.match(/#(\d+)\s+in\s+AG/i) || text.match(/#(\d+)\s+in/i);
+        if (match && categoryPosition === 'Unknown') {
+          categoryPosition = match[1];
+          return false; // break
+        }
+      });
     }
     
     // Extract total time
@@ -231,88 +246,13 @@ async function generateRoast(prompt) {
   }
 }
 
-// Create payment intent endpoint
-app.post('/api/create-payment-intent', async (req, res) => {
-  try {
-    const { currency } = req.body;
-    
-    if (!currency || (currency !== 'gbp' && currency !== 'usd')) {
-      return res.status(400).json({ error: 'Valid currency (gbp or usd) is required' });
-    }
-    
-    if (!process.env.STRIPE_SECRET_KEY) {
-      return res.status(500).json({ error: 'Stripe not configured' });
-    }
-    
-    const amount = 50; // £0.50 or $0.50 (in smallest currency unit)
-    
-    const paymentIntent = await stripe.paymentIntents.create({
-      amount: amount,
-      currency: currency,
-      metadata: {
-        product: 'hyrox-roast'
-      }
-    });
-    
-    res.json({
-      clientSecret: paymentIntent.client_secret,
-      paymentIntentId: paymentIntent.id
-    });
-    
-  } catch (error) {
-    console.error('Error creating payment intent:', error);
-    res.status(500).json({ 
-      error: error.message || 'Failed to create payment intent'
-    });
-  }
-});
-
-// Verify payment endpoint
-app.post('/api/verify-payment', async (req, res) => {
-  try {
-    const { paymentIntentId } = req.body;
-    
-    if (!paymentIntentId) {
-      return res.status(400).json({ error: 'Payment intent ID is required' });
-    }
-    
-    if (!process.env.STRIPE_SECRET_KEY) {
-      return res.status(500).json({ error: 'Stripe not configured' });
-    }
-    
-    const paymentIntent = await stripe.paymentIntents.retrieve(paymentIntentId);
-    
-    if (paymentIntent.status !== 'succeeded') {
-      return res.status(400).json({ 
-        error: 'Payment not completed',
-        status: paymentIntent.status
-      });
-    }
-    
-    res.json({
-      verified: true,
-      paymentIntentId: paymentIntent.id
-    });
-    
-  } catch (error) {
-    console.error('Error verifying payment:', error);
-    res.status(500).json({ 
-      error: error.message || 'Failed to verify payment'
-    });
-  }
-});
-
 // API endpoint
 app.post('/api/roast', async (req, res) => {
   try {
-    const { url, paymentIntentId } = req.body;
+    const { url } = req.body;
     
     if (!url) {
       return res.status(400).json({ error: 'URL is required' });
-    }
-    
-    if (!paymentIntentId) {
-      return res.status(400).json({ error: 'Payment intent ID is required' });
     }
     
     if (!url.includes('hyresult.com')) {
@@ -321,22 +261,6 @@ app.post('/api/roast', async (req, res) => {
     
     if (!process.env.GEMINI_API_KEY) {
       return res.status(500).json({ error: 'Gemini API key not configured' });
-    }
-    
-    // Verify payment before generating roast
-    try {
-      const paymentIntent = await stripe.paymentIntents.retrieve(paymentIntentId);
-      
-      if (paymentIntent.status !== 'succeeded') {
-        return res.status(400).json({ 
-          error: 'Payment not completed. Please complete payment first.',
-          status: paymentIntent.status
-        });
-      }
-    } catch (stripeError) {
-      return res.status(400).json({ 
-        error: 'Invalid payment. Please complete payment first.'
-      });
     }
     
     // Scrape results
@@ -368,13 +292,6 @@ app.post('/api/roast', async (req, res) => {
 // Health check
 app.get('/api/health', (req, res) => {
   res.json({ status: 'ok' });
-});
-
-// Config endpoint - returns Stripe publishable key
-app.get('/api/config', (req, res) => {
-  res.json({
-    stripePublishableKey: process.env.STRIPE_PUBLISHABLE_KEY || ''
-  });
 });
 
 // Export for Vercel serverless
