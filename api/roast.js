@@ -9,6 +9,16 @@ const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 // Scrape Hyrox results page
 async function scrapeHyroxResults(url) {
   try {
+    // Ensure URL has ?tab=splits parameter
+    const urlObj = new URL(url);
+    if (!urlObj.searchParams.has('tab')) {
+      urlObj.searchParams.set('tab', 'splits');
+      url = urlObj.toString();
+    } else if (urlObj.searchParams.get('tab') !== 'splits') {
+      urlObj.searchParams.set('tab', 'splits');
+      url = urlObj.toString();
+    }
+    
     const response = await axios.get(url, {
       headers: {
         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
