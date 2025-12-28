@@ -15,6 +15,16 @@ console.log(`Testing with URL: ${TEST_URL}\n`);
 // Scrape Hyrox results page (same function as in api/roast.js)
 async function scrapeHyroxResults(url) {
   try {
+    // Ensure URL has ?tab=splits parameter
+    const urlObj = new URL(url);
+    if (!urlObj.searchParams.has('tab')) {
+      urlObj.searchParams.set('tab', 'splits');
+      url = urlObj.toString();
+    } else if (urlObj.searchParams.get('tab') !== 'splits') {
+      urlObj.searchParams.set('tab', 'splits');
+      url = urlObj.toString();
+    }
+    
     console.log('📡 Fetching results page...');
     const response = await axios.get(url, {
       headers: {
