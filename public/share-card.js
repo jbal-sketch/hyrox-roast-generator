@@ -10,8 +10,8 @@ function generateShareCardImage(data) {
     
     // Background gradient
     const gradient = ctx.createLinearGradient(0, 0, width, height);
-    gradient.addColorStop(0, '#1D3557');
-    gradient.addColorStop(1, '#457B9D');
+    gradient.addColorStop(0, '#1F2937');
+    gradient.addColorStop(1, '#111827');
     ctx.fillStyle = gradient;
     ctx.fillRect(0, 0, width, height);
     
@@ -24,7 +24,7 @@ function generateShareCardImage(data) {
     }
     
     // Title
-    ctx.fillStyle = '#E63946';
+    ctx.fillStyle = '#FF6B35';
     ctx.font = 'bold 60px Arial';
     ctx.textAlign = 'center';
     ctx.textBaseline = 'top';
@@ -37,7 +37,7 @@ function generateShareCardImage(data) {
     ctx.fillText(athleteName, width / 2, 120);
     
     // Stats section
-    ctx.fillStyle = '#F1FAEE';
+    ctx.fillStyle = '#FF8C42';
     ctx.font = '36px Arial';
     const statsY = 220;
     const stats = [
@@ -51,7 +51,7 @@ function generateShareCardImage(data) {
     });
     
     // Divider line
-    ctx.strokeStyle = '#E63946';
+    ctx.strokeStyle = '#FF6B35';
     ctx.lineWidth = 3;
     ctx.beginPath();
     ctx.moveTo(100, 400);
@@ -99,7 +99,7 @@ function generateShareCardImage(data) {
     });
     
     // Footer
-    ctx.fillStyle = '#A8DADC';
+    ctx.fillStyle = '#FF8C42';
     ctx.font = '24px Arial';
     ctx.fillText('Get your roast at hyroxroast.com', width / 2, height - 50);
 }

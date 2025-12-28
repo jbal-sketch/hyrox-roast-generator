@@ -5,11 +5,11 @@
 }
 
 :root {
-    --hyrox-red: #E63946;
-    --hyrox-dark: #1D3557;
-    --hyrox-blue: #457B9D;
-    --hyrox-light: #F1FAEE;
-    --hyrox-accent: #A8DADC;
+    --hyrox-orange: #FF6B35;
+    --hyrox-charcoal: #1F2937;
+    --hyrox-amber: #F59E0B;
+    --hyrox-light: #F9FAFB;
+    --hyrox-gold: #FF8C42;
 }
 
 body {
@@ -30,11 +30,11 @@ body {
 }
 
 header {
-    background: linear-gradient(135deg, var(--hyrox-red) 0%, #C1121F 100%);
-    color: white;
+    background: linear-gradient(135deg, var(--hyrox-charcoal) 0%, #111827 100%);
+    color: var(--hyrox-orange);
     padding: 3rem 1.5rem;
     text-align: center;
-    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    border-bottom: 1px solid rgba(255, 107, 53, 0.2);
 }
 
 header h1 {
@@ -121,8 +121,8 @@ main {
 
 #hyroxUrl:focus {
     outline: none;
-    border-color: var(--hyrox-blue);
-    box-shadow: 0 0 0 3px rgba(69, 123, 157, 0.1);
+    border-color: var(--hyrox-orange);
+    box-shadow: 0 0 0 3px rgba(255, 107, 53, 0.1);
 }
 
 #hyroxUrl::placeholder {
@@ -131,8 +131,8 @@ main {
 
 #submitBtn {
     padding: 0.75rem 1.5rem;
-    background: var(--hyrox-red);
-    color: white;
+    background: var(--hyrox-orange);
+    color: var(--hyrox-charcoal);
     border: none;
     border-radius: 0.5rem;
     font-size: 1rem;
@@ -143,7 +143,7 @@ main {
 }
 
 #submitBtn:hover {
-    background: #C1121F;
+    background: var(--hyrox-amber);
     transform: translateY(-1px);
     box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
 }
@@ -166,7 +166,7 @@ main {
 
 .spinner {
     border: 3px solid #e2e8f0;
-    border-top: 3px solid var(--hyrox-red);
+    border-top: 3px solid var(--hyrox-orange);
     border-radius: 50%;
     width: 3rem;
     height: 3rem;
@@ -219,7 +219,7 @@ main {
 }
 
 .athlete-info h2 {
-    color: var(--hyrox-red);
+    color: var(--hyrox-orange);
     margin-bottom: 1.25rem;
     font-size: 1.875rem;
     font-weight: 700;
@@ -253,7 +253,7 @@ main {
 .stat-value {
     display: block;
     font-size: 1.5rem;
-    color: var(--hyrox-dark);
+    color: var(--hyrox-charcoal);
     font-weight: 700;
 }
 
@@ -262,7 +262,7 @@ main {
 }
 
 .roast-section h3 {
-    color: var(--hyrox-dark);
+    color: var(--hyrox-charcoal);
     margin-bottom: 1rem;
     font-size: 1.5rem;
     font-weight: 700;
@@ -271,7 +271,7 @@ main {
 
 .roast-text {
     background: #fffbeb;
-    border-left: 4px solid var(--hyrox-red);
+    border-left: 4px solid var(--hyrox-orange);
     padding: 1.5rem;
     border-radius: 0.5rem;
     font-size: 1.0625rem;
@@ -292,7 +292,7 @@ main {
 }
 
 .share-section h3 {
-    color: var(--hyrox-dark);
+    color: var(--hyrox-charcoal);
     margin-bottom: 1.5rem;
     font-size: 1.5rem;
     font-weight: 700;
@@ -317,7 +317,7 @@ main {
 .share-btn {
     padding: 0.875rem 1.5rem;
     background: white;
-    color: var(--hyrox-dark);
+    color: var(--hyrox-charcoal);
     border: 2px solid #e2e8f0;
     border-radius: 0.75rem;
     font-size: 0.9375rem;
@@ -333,9 +333,9 @@ main {
 }
 
 .share-btn:hover {
-    background: var(--hyrox-blue);
+    background: var(--hyrox-amber);
     color: white;
-    border-color: var(--hyrox-blue);
+    border-color: var(--hyrox-amber);
     transform: translateY(-2px);
     box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
 }
@@ -357,7 +357,7 @@ main {
 }
 
 .share-card-container:hover {
-    border-color: var(--hyrox-blue);
+    border-color: var(--hyrox-orange);
     box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
 }
 
@@ -369,8 +369,8 @@ main {
 }
 
 footer {
-    background: var(--hyrox-dark);
-    color: white;
+    background: var(--hyrox-charcoal);
+    color: var(--hyrox-orange);
     text-align: center;
     padding: 1.5rem;
     font-size: 0.875rem;
@@ -391,13 +391,13 @@ footer {
 }
 
 .ad-section h3 {
-    color: var(--hyrox-dark);
+    color: var(--hyrox-charcoal);
     margin-bottom: 10px;
     font-size: 1.5rem;
 }
 
 .ad-info {
-    color: var(--hyrox-blue);
+    color: var(--hyrox-amber);
     margin-bottom: 20px;
     font-size: 1rem;
 }
@@ -409,7 +409,7 @@ footer {
     justify-content: center;
     align-items: center;
     background: white;
-    border: 2px solid var(--hyrox-accent);
+    border: 2px solid var(--hyrox-gold);
     border-radius: 10px;
     padding: 20px;
 }
