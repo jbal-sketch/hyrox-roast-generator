@@ -210,14 +210,15 @@ ${splitsText}
 ${slowestText}
 
 INSTRUCTIONS:
-1. Create a humorous, playful roast (2-3 short paragraphs)
+1. Create a humorous, playful roast (1-2 SHORT paragraphs, keep it concise and punchy)
 2. Be witty and funny, but keep it light-hearted and constructive
 3. Point out interesting aspects like slowest splits, position relative to field size
 4. Make playful jokes about their performance - like a friendly banter between training partners
-5. Keep it shareable and entertaining for social media
+5. Keep it shareable and entertaining for social media - SHORT and snappy is better
 6. Don't be mean-spirited or overly harsh - this should be fun and motivating
-7. Use emojis sparingly (1-2 max) if it adds to the humor
+7. Use emojis throughout to add personality and humor - sprinkle them naturally (3-5 emojis total)
 8. Make it feel like a friendly roast from a fellow athlete who's been there
+9. Keep the total length under 200 words - be punchy and get to the point quickly
 
 Generate the roast now:`;
 }

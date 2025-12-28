@@ -8,6 +8,7 @@
     <meta property="og:title" content="Hyrox Roast Generator">
     <meta property="og:description" content="Get a hilarious roast of your Hyrox performance">
     <meta property="og:type" content="website">
+    <!-- Google AdSense - Replace ca-pub-XXXXXXXXXX with your Publisher ID -->
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXX"
      crossorigin="anonymous"></script>
 </head>
@@ -18,83 +19,91 @@
             <p class="subtitle">Paste your Hyrox results URL and get roasted (in a fun way!)</p>
         </header>
 
-        <main>
-            <div class="input-section">
-                <form id="roastForm">
-                    <div class="input-group">
-                        <input 
-                            type="url" 
-                            id="hyroxUrl" 
-                            placeholder="https://www.hyresult.com/result/YOUR_RESULT_ID"
-                            required
-                        >
-                        <button type="submit" id="submitBtn">Get Roasted 🔥</button>
+        <main class="main-content-wrapper">
+            <div class="content-area">
+                <div class="input-section">
+                    <form id="roastForm">
+                        <div class="input-group">
+                            <input 
+                                type="url" 
+                                id="hyroxUrl" 
+                                placeholder="https://www.hyresult.com/result/YOUR_RESULT_ID"
+                                required
+                            >
+                            <button type="submit" id="submitBtn">Get Roasted 🔥</button>
+                        </div>
+                    </form>
+                </div>
+
+                <div id="loading" class="loading hidden">
+                    <div class="spinner"></div>
+                    <p>Scraping your results and generating your roast...</p>
+                </div>
+
+                <div id="error" class="error hidden"></div>
+
+                <div id="results" class="results hidden">
+                    <div class="athlete-info">
+                        <h2 id="athleteName"></h2>
+                        <div class="stats">
+                            <div class="stat">
+                                <span class="stat-label">Total Time</span>
+                                <span class="stat-value" id="totalTime"></span>
+                            </div>
+                            <div class="stat">
+                                <span class="stat-label">Overall Position</span>
+                                <span class="stat-value" id="overallPosition"></span>
+                            </div>
+                            <div class="stat">
+                                <span class="stat-label">Category Position</span>
+                                <span class="stat-value" id="categoryPosition"></span>
+                            </div>
+                        </div>
                     </div>
-                </form>
+
+                    <div class="roast-section">
+                        <h3>Your Roast:</h3>
+                        <div class="roast-text" id="roastText"></div>
+                    </div>
+
+                    <div class="share-section">
+                        <h3>Share Your Roast:</h3>
+                        <div class="share-buttons">
+                            <button id="downloadImage" class="share-btn">📥 Download Image</button>
+                            <button id="copyText" class="share-btn">📋 Copy Text</button>
+                            <a id="twitterShare" class="share-btn" target="_blank" rel="noopener noreferrer">🐦 Share on Twitter</a>
+                            <a id="facebookShare" class="share-btn" target="_blank" rel="noopener noreferrer">📘 Share on Facebook</a>
+                        </div>
+                        <div id="shareCardContainer" class="share-card-container">
+                            <canvas id="shareCard" class="share-card"></canvas>
+                        </div>
+                    </div>
+                </div>
             </div>
 
-            <div id="ad-section" class="ad-section hidden">
-                <h3>Please view the ad below to generate your roast</h3>
-                <p class="ad-info">Your roast will be generated automatically once the ad is visible</p>
-                <div id="adsense-container" class="adsense-container">
-                    <!-- AdSense MPU ad will be inserted here -->
+            <aside class="sidebar">
+                <div class="sidebar-content">
+                    <h3 class="sidebar-title">Advertisement</h3>
+                    <!-- Google AdSense Sidebar Ad Unit -->
+                    <!-- Replace ca-pub-XXXXXXXXXX with your Publisher ID and data-ad-slot with your Ad Slot ID -->
                     <ins class="adsbygoogle"
                          style="display:block"
                          data-ad-client="ca-pub-XXXXXXXXXX"
                          data-ad-slot="XXXXXXXXXX"
                          data-ad-format="auto"
                          data-full-width-responsive="true"></ins>
+                    <script>
+                         (adsbygoogle = window.adsbygoogle || []).push({});
+                    </script>
                 </div>
-            </div>
-
-            <div id="loading" class="loading hidden">
-                <div class="spinner"></div>
-                <p>Scraping your results and generating your roast...</p>
-            </div>
-
-            <div id="error" class="error hidden"></div>
-
-            <div id="results" class="results hidden">
-                <div class="athlete-info">
-                    <h2 id="athleteName"></h2>
-                    <div class="stats">
-                        <div class="stat">
-                            <span class="stat-label">Total Time</span>
-                            <span class="stat-value" id="totalTime"></span>
-                        </div>
-                        <div class="stat">
-                            <span class="stat-label">Overall Position</span>
-                            <span class="stat-value" id="overallPosition"></span>
-                        </div>
-                        <div class="stat">
-                            <span class="stat-label">Category Position</span>
-                            <span class="stat-value" id="categoryPosition"></span>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="roast-section">
-                    <h3>Your Roast:</h3>
-                    <div class="roast-text" id="roastText"></div>
-                </div>
-
-                <div class="share-section">
-                    <h3>Share Your Roast:</h3>
-                    <div class="share-buttons">
-                        <button id="downloadImage" class="share-btn">📥 Download Image</button>
-                        <button id="copyText" class="share-btn">📋 Copy Text</button>
-                        <a id="twitterShare" class="share-btn" target="_blank" rel="noopener noreferrer">🐦 Share on Twitter</a>
-                        <a id="facebookShare" class="share-btn" target="_blank" rel="noopener noreferrer">📘 Share on Facebook</a>
-                    </div>
-                    <div id="shareCardContainer" class="share-card-container">
-                        <canvas id="shareCard" class="share-card"></canvas>
-                    </div>
-                </div>
-            </div>
+            </aside>
         </main>
 
         <footer>
             <p>Made with 🔥 for the Hyrox community</p>
+            <p style="margin-top: 0.5rem; font-size: 0.875rem;">
+                <a href="privacy.html" style="color: rgba(255, 255, 255, 0.8); text-decoration: underline;">Privacy Policy</a>
+            </p>
         </footer>
     </div>
 
