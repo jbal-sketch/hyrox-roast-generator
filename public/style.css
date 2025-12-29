@@ -86,6 +86,74 @@ header h1 {
     box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
 }
 
+.input-section.header-form {
+    max-width: 800px;
+    margin: 2rem auto 1.5rem;
+    padding: 0;
+}
+
+.input-section.header-form .input-group {
+    display: flex;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.input-section.header-form .hyrox-url-input {
+    flex: 1;
+    min-width: 280px;
+    max-width: 500px;
+    padding: 0.875rem 1rem;
+    border: 2px solid rgba(255, 107, 53, 0.3);
+    border-radius: 0.5rem;
+    font-size: 1rem;
+    transition: all 0.2s;
+    background: rgba(255, 255, 255, 0.95);
+    color: #1e293b;
+}
+
+.input-section.header-form .hyrox-url-input:focus {
+    outline: none;
+    border-color: var(--hyrox-orange);
+    box-shadow: 0 0 0 3px rgba(255, 107, 53, 0.2);
+    background: white;
+}
+
+.input-section.header-form .hyrox-url-input::placeholder {
+    color: #94a3b8;
+}
+
+.input-section.header-form .submit-btn {
+    padding: 0.875rem 2rem;
+    background: var(--hyrox-orange);
+    color: var(--hyrox-charcoal);
+    border: none;
+    border-radius: 0.5rem;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    white-space: nowrap;
+}
+
+.input-section.header-form .submit-btn:hover {
+    background: var(--hyrox-amber);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+.input-section.header-form .submit-btn:active {
+    transform: translateY(0);
+}
+
+.input-section.header-form .submit-btn:disabled {
+    background: rgba(255, 255, 255, 0.3);
+    color: rgba(255, 107, 53, 0.5);
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+}
+
 main {
     padding: 0;
 }
@@ -354,6 +422,59 @@ main {
     flex-wrap: wrap;
 }
 
+.hyrox-url-input {
+    flex: 1;
+    min-width: 280px;
+    padding: 0.75rem 1rem;
+    border: 1px solid #e2e8f0;
+    border-radius: 0.5rem;
+    font-size: 1rem;
+    transition: all 0.2s;
+    background: white;
+    color: #1e293b;
+}
+
+.hyrox-url-input:focus {
+    outline: none;
+    border-color: var(--hyrox-orange);
+    box-shadow: 0 0 0 3px rgba(255, 107, 53, 0.1);
+}
+
+.hyrox-url-input::placeholder {
+    color: #94a3b8;
+}
+
+.submit-btn {
+    padding: 0.75rem 1.5rem;
+    background: var(--hyrox-orange);
+    color: var(--hyrox-charcoal);
+    border: none;
+    border-radius: 0.5rem;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    white-space: nowrap;
+}
+
+.submit-btn:hover {
+    background: var(--hyrox-amber);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+.submit-btn:active {
+    transform: translateY(0);
+}
+
+.submit-btn:disabled {
+    background: #cbd5e1;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+}
+
+/* Legacy ID selectors for backwards compatibility */
 #hyroxUrl {
     flex: 1;
     min-width: 280px;
@@ -769,8 +890,18 @@ footer {
         flex-direction: column;
     }
     
+    .hyrox-url-input, .submit-btn,
     #hyroxUrl, #submitBtn {
         width: 100%;
+    }
+    
+    .input-section.header-form .hyrox-url-input {
+        max-width: 100%;
+    }
+    
+    .input-section.header-form {
+        margin: 1.5rem auto 1rem;
+        padding: 0 1rem;
     }
     
     .stats {

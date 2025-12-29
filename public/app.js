@@ -1,34 +1,61 @@
-const form = document.getElementById('roastForm');
-const urlInput = document.getElementById('hyroxUrl');
-const submitBtn = document.getElementById('submitBtn');
+// Get all forms and inputs
+const forms = document.querySelectorAll('.roast-form');
+const urlInputs = document.querySelectorAll('.hyrox-url-input');
+const submitBtns = document.querySelectorAll('.submit-btn');
 const loading = document.getElementById('loading');
 const error = document.getElementById('error');
 const results = document.getElementById('results');
 
+// Function to sync input values between both forms
+function syncInputs() {
+    const values = Array.from(urlInputs).map(input => input.value);
+    const firstValue = values[0] || '';
+    urlInputs.forEach(input => {
+        if (input.value !== firstValue) {
+            input.value = firstValue;
+        }
+    });
+}
 
-form.addEventListener('submit', async (e) => {
-    e.preventDefault();
-    
-    const url = urlInput.value.trim();
-    
-    if (!url) {
-        showError('Please enter a Hyrox results URL');
-        return;
-    }
-    
-    if (!url.includes('hyresult.com')) {
-        showError('Please enter a valid Hyrox results URL');
-        return;
-    }
-    
-    // Hide previous results and errors
-    results.classList.add('hidden');
-    error.classList.add('hidden');
-    loading.classList.remove('hidden');
-    submitBtn.disabled = true;
-    
-    // Generate roast directly (ads are in sidebar)
-    generateRoast(url);
+// Sync inputs when user types
+urlInputs.forEach(input => {
+    input.addEventListener('input', syncInputs);
+});
+
+// Add submit listener to all forms
+forms.forEach((form, index) => {
+    form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        
+        // Get the URL from the form that was submitted
+        const formInput = form.querySelector('.hyrox-url-input');
+        const formSubmitBtn = form.querySelector('.submit-btn');
+        const url = formInput.value.trim();
+        
+        // Sync all inputs
+        syncInputs();
+        
+        if (!url) {
+            showError('Please enter a Hyrox results URL');
+            return;
+        }
+        
+        if (!url.includes('hyresult.com')) {
+            showError('Please enter a valid Hyrox results URL');
+            return;
+        }
+        
+        // Hide previous results and errors
+        results.classList.add('hidden');
+        error.classList.add('hidden');
+        loading.classList.remove('hidden');
+        
+        // Disable all submit buttons
+        submitBtns.forEach(btn => btn.disabled = true);
+        
+        // Generate roast directly (ads are in sidebar)
+        generateRoast(url);
+    });
 });
 
 async function generateRoast(url) {
@@ -55,7 +82,8 @@ async function generateRoast(url) {
         showError(err.message || 'Something went wrong. Please try again.');
     } finally {
         loading.classList.add('hidden');
-        submitBtn.disabled = false;
+        // Re-enable all submit buttons
+        submitBtns.forEach(btn => btn.disabled = false);
     }
 }
 
@@ -63,7 +91,8 @@ function showError(message) {
     error.textContent = message;
     error.classList.remove('hidden');
     loading.classList.add('hidden');
-    submitBtn.disabled = false;
+    // Re-enable all submit buttons
+    submitBtns.forEach(btn => btn.disabled = false);
 }
 
 function displayResults(data) {

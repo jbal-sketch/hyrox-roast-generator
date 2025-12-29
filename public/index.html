@@ -19,6 +19,23 @@
             <img src="logo.png" alt="Hyrox Roast Generator Logo" class="logo">
             <h1>🔥 Hyrox Roast Generator 🔥</h1>
             <p class="subtitle">Get a hilarious, AI-generated roast of your Hyrox performance! Paste your results URL and we'll create a witty, shareable roast that's perfect for social media. All in good fun! 🎯</p>
+            
+            <!-- Header Form -->
+            <div class="input-section header-form">
+                <form id="roastFormHeader" class="roast-form">
+                    <div class="input-group">
+                        <input 
+                            type="url" 
+                            id="hyroxUrlHeader" 
+                            class="hyrox-url-input"
+                            placeholder="https://www.hyresult.com/result/YOUR_RESULT_ID"
+                            required
+                        >
+                        <button type="submit" id="submitBtnHeader" class="submit-btn">Get Roasted 🔥</button>
+                    </div>
+                </form>
+            </div>
+            
             <div class="social-links-header">
                 <a href="https://www.instagram.com/roastmyhyrox/" target="_blank" rel="noopener noreferrer" class="instagram-link">📷 Follow @roastmyhyrox</a>
             </div>
@@ -80,15 +97,16 @@
                 </section>
 
                 <div class="input-section">
-                    <form id="roastForm">
+                    <form id="roastForm" class="roast-form">
                         <div class="input-group">
                             <input 
                                 type="url" 
                                 id="hyroxUrl" 
+                                class="hyrox-url-input"
                                 placeholder="https://www.hyresult.com/result/YOUR_RESULT_ID"
                                 required
                             >
-                            <button type="submit" id="submitBtn">Get Roasted 🔥</button>
+                            <button type="submit" id="submitBtn" class="submit-btn">Get Roasted 🔥</button>
                         </div>
                         <p class="form-note">💡 Tip: Make sure your results URL includes your splits data for the best roast!</p>
                     </form>
