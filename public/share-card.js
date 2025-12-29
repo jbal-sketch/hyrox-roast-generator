@@ -99,42 +99,26 @@ function generateShareCardImage(data, format = 'stories') {
         ctx.drawImage(logoImage, logoX, logoY, logoSize, logoSize);
     }
     
-    // Title text (above banner)
-    const title = data.title || 'HYROX ROAST';
-    ctx.fillStyle = '#FFFFFF';
-    ctx.font = `bold ${isStories ? 60 : 50}px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif`;
-    ctx.textAlign = 'center';
-    ctx.textBaseline = 'top';
-    const titleY = isStories ? 60 : 50;
-    ctx.fillText(title, width / 2, titleY);
-    
-    // Yellow banner with finish time
-    const bannerHeight = isStories ? 120 : 100;
-    const bannerY = isStories ? 150 : 130;
-    ctx.fillStyle = '#FFD700'; // Yellow
-    ctx.fillRect(0, bannerY, width, bannerHeight);
-    
-    // Finish time text on banner
-    const finishTime = data.data.totalTime || 'N/A';
-    ctx.fillStyle = '#000000';
-    ctx.font = `bold ${isStories ? 64 : 52}px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif`;
-    ctx.textAlign = 'center';
-    ctx.textBaseline = 'middle';
-    ctx.fillText(`FINISH TIME: ${finishTime}`, width / 2, bannerY + bannerHeight / 2);
-    
-    // Roast text below banner
-    const roastText = data.roast || '';
-    const maxWidth = width - 160; // Padding on both sides
-    const startY = bannerY + bannerHeight + (isStories ? 40 : 35);
-    const availableHeight = height - startY - (isStories ? 80 : 70); // Space for footer
-    
     // Use modern font stack
     const modernFont = '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif';
     
-    // Start with a font size and adjust if needed
-    let fontSize = isStories ? 36 : 28;
-    let lineHeight = fontSize + 10;
-    let paragraphSpacing = 20;
+    // Define spacing constants
+    const titleFontSize = isStories ? 72 : 60;
+    const bannerHeight = isStories ? 140 : 120;
+    const spacingAfterTitle = isStories ? 30 : 25;
+    const spacingAfterBanner = isStories ? 40 : 35;
+    const maxWidth = width - 160; // Padding on both sides
+    
+    // Calculate title height
+    ctx.font = `bold ${titleFontSize}px ${modernFont}`;
+    const title = data.title || 'HYROX ROAST';
+    const titleMetrics = ctx.measureText(title);
+    const titleHeight = titleMetrics.actualBoundingBoxAscent + titleMetrics.actualBoundingBoxDescent;
+    
+    // Process roast text to calculate its height
+    const roastText = data.roast || '';
+    let fontSize = isStories ? 42 : 32;
+    let lineHeight, paragraphSpacing;
     let allLines = [];
     
     // Split text into paragraphs
@@ -143,12 +127,13 @@ function generateShareCardImage(data, format = 'stories') {
         paragraphs.push(roastText);
     }
     
-    // Try to fit the text, reducing font size if necessary
+    // Calculate roast text dimensions (try to fit, reducing font size if necessary)
     let attempts = 0;
-    while (attempts < 5) {
+    const maxAvailableHeight = height * 0.6; // Use max 60% of canvas height for text
+    while (attempts < 8) {
         ctx.font = `${fontSize}px ${modernFont}`;
-        lineHeight = fontSize + 10;
-        paragraphSpacing = Math.max(16, fontSize * 0.7);
+        lineHeight = fontSize * 1.4; // Better line spacing for Instagram
+        paragraphSpacing = Math.max(20, fontSize * 0.8);
         allLines = [];
         
         // Process each paragraph separately
@@ -185,7 +170,7 @@ function generateShareCardImage(data, format = 'stories') {
         }, 0);
         
         // If text fits, break; otherwise reduce font size
-        if (totalTextHeight <= availableHeight || fontSize <= 20) {
+        if (totalTextHeight <= maxAvailableHeight || fontSize <= 22) {
             break;
         }
         
@@ -194,30 +179,81 @@ function generateShareCardImage(data, format = 'stories') {
     }
     
     // Recalculate lineHeight and paragraphSpacing with final fontSize
-    lineHeight = fontSize + 10;
-    paragraphSpacing = Math.max(16, fontSize * 0.7);
+    lineHeight = fontSize * 1.4;
+    paragraphSpacing = Math.max(20, fontSize * 0.8);
     
-    // Draw all lines
+    // Calculate total roast text height
+    const roastTextHeight = allLines.reduce((sum, line) => {
+        return sum + (line.isParagraphBreak ? paragraphSpacing : lineHeight);
+    }, 0);
+    
+    // Calculate total content height
+    const totalContentHeight = titleHeight + spacingAfterTitle + bannerHeight + spacingAfterBanner + roastTextHeight;
+    
+    // Calculate vertical center position
+    const contentStartY = (height - totalContentHeight) / 2;
+    
+    // Set text shadow properties for Instagram-style readability
+    ctx.shadowBlur = 8;
+    ctx.shadowColor = 'rgba(0, 0, 0, 0.8)';
+    ctx.shadowOffsetX = 2;
+    ctx.shadowOffsetY = 2;
+    
+    // Draw title
+    let currentY = contentStartY;
     ctx.fillStyle = '#FFFFFF';
+    ctx.font = `bold ${titleFontSize}px ${modernFont}`;
     ctx.textAlign = 'center';
     ctx.textBaseline = 'top';
-    let currentY = startY;
+    ctx.fillText(title, width / 2, currentY);
+    currentY += titleHeight + spacingAfterTitle;
+    
+    // Draw yellow banner with finish time
+    ctx.shadowBlur = 0; // No shadow on banner
+    ctx.shadowColor = 'transparent';
+    ctx.fillStyle = '#FFD700'; // Yellow
+    ctx.fillRect(0, currentY, width, bannerHeight);
+    
+    // Finish time text on banner
+    const finishTime = data.data.totalTime || 'N/A';
+    ctx.fillStyle = '#000000';
+    ctx.font = `bold ${isStories ? 72 : 60}px ${modernFont}`;
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillText(`FINISH TIME: ${finishTime}`, width / 2, currentY + bannerHeight / 2);
+    currentY += bannerHeight + spacingAfterBanner;
+    
+    // Re-enable text shadow for roast text
+    ctx.shadowBlur = 8;
+    ctx.shadowColor = 'rgba(0, 0, 0, 0.8)';
+    ctx.shadowOffsetX = 2;
+    ctx.shadowOffsetY = 2;
+    
+    // Draw roast text
+    ctx.fillStyle = '#FFFFFF';
+    ctx.font = `${fontSize}px ${modernFont}`;
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'top';
     
     allLines.forEach((line) => {
         if (line.isParagraphBreak) {
             currentY += paragraphSpacing;
         } else {
-            if (currentY < height - 80) {
-                ctx.fillText(line.text, width / 2, currentY);
-                currentY += lineHeight;
-            }
+            ctx.fillText(line.text, width / 2, currentY);
+            currentY += lineHeight;
         }
     });
     
-    // Footer
-    ctx.fillStyle = '#FFFFFF';
-    ctx.font = `${isStories ? 24 : 20}px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif`;
+    // Reset shadow
+    ctx.shadowBlur = 0;
+    ctx.shadowColor = 'transparent';
+    ctx.shadowOffsetX = 0;
+    ctx.shadowOffsetY = 0;
+    
+    // Minimal footer at absolute bottom (very small, subtle)
+    ctx.fillStyle = 'rgba(255, 255, 255, 0.6)';
+    ctx.font = `16px ${modernFont}`;
     ctx.textAlign = 'center';
     ctx.textBaseline = 'bottom';
-    ctx.fillText('Get your roast at https://hyrox-roast-generator.vercel.app/', width / 2, height - 30);
+    ctx.fillText('hyrox-roast-generator.vercel.app', width / 2, height - 10);
 }
