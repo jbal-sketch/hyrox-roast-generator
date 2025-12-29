@@ -91,10 +91,10 @@ function generateShareCardImage(data, format = 'stories') {
         ctx.fillRect(0, 0, width, height);
     }
     
-    // Draw logo in top-right corner
+    // Draw logo in top-left corner
     if (logoImage && logoImage.complete) {
         const logoSize = isStories ? 120 : 100;
-        const logoX = width - logoSize - 40;
+        const logoX = 40;
         const logoY = 40;
         ctx.drawImage(logoImage, logoX, logoY, logoSize, logoSize);
     }
@@ -105,12 +105,12 @@ function generateShareCardImage(data, format = 'stories') {
     ctx.font = `bold ${isStories ? 60 : 50}px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif`;
     ctx.textAlign = 'center';
     ctx.textBaseline = 'top';
-    const titleY = isStories ? 80 : 60;
+    const titleY = isStories ? 60 : 50;
     ctx.fillText(title, width / 2, titleY);
     
     // Yellow banner with finish time
     const bannerHeight = isStories ? 120 : 100;
-    const bannerY = isStories ? 180 : 150;
+    const bannerY = isStories ? 150 : 130;
     ctx.fillStyle = '#FFD700'; // Yellow
     ctx.fillRect(0, bannerY, width, bannerHeight);
     
@@ -125,8 +125,8 @@ function generateShareCardImage(data, format = 'stories') {
     // Roast text below banner
     const roastText = data.roast || '';
     const maxWidth = width - 160; // Padding on both sides
-    const startY = bannerY + bannerHeight + (isStories ? 60 : 50);
-    const availableHeight = height - startY - (isStories ? 100 : 80); // Space for footer
+    const startY = bannerY + bannerHeight + (isStories ? 40 : 35);
+    const availableHeight = height - startY - (isStories ? 80 : 70); // Space for footer
     
     // Use modern font stack
     const modernFont = '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif';
@@ -219,5 +219,5 @@ function generateShareCardImage(data, format = 'stories') {
     ctx.font = `${isStories ? 24 : 20}px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif`;
     ctx.textAlign = 'center';
     ctx.textBaseline = 'bottom';
-    ctx.fillText('Get your roast at hyroxroast.com', width / 2, height - 30);
+    ctx.fillText('Get your roast at https://hyrox-roast-generator.vercel.app/', width / 2, height - 30);
 }
