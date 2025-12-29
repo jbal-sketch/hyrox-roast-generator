@@ -37,6 +37,15 @@ header {
     border-bottom: 1px solid rgba(255, 107, 53, 0.2);
 }
 
+.logo {
+    max-width: 200px;
+    height: auto;
+    margin-bottom: 1.5rem;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
 header h1 {
     font-size: 2.25rem;
     font-weight: 800;
@@ -48,6 +57,33 @@ header h1 {
     font-size: 1.125rem;
     opacity: 0.95;
     font-weight: 400;
+    max-width: 800px;
+    margin: 0 auto 1.5rem;
+    line-height: 1.7;
+}
+
+.social-links-header {
+    margin-top: 1.5rem;
+}
+
+.instagram-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--hyrox-orange);
+    text-decoration: none;
+    font-weight: 600;
+    padding: 0.5rem 1rem;
+    border: 2px solid var(--hyrox-orange);
+    border-radius: 0.5rem;
+    transition: all 0.2s;
+}
+
+.instagram-link:hover {
+    background: var(--hyrox-orange);
+    color: var(--hyrox-charcoal);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
 }
 
 main {
@@ -100,6 +136,212 @@ main {
     display: block;
     text-align: center;
     margin: 0 auto;
+}
+
+.info-section {
+    background: white;
+    padding: 2rem;
+    border-radius: 0.75rem;
+    margin-bottom: 2rem;
+    border: 1px solid #e2e8f0;
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+}
+
+.info-section h2 {
+    color: var(--hyrox-orange);
+    font-size: 2rem;
+    font-weight: 700;
+    margin-bottom: 1.5rem;
+    letter-spacing: -0.025em;
+    border-bottom: 2px solid var(--hyrox-orange);
+    padding-bottom: 0.75rem;
+}
+
+.info-section h3 {
+    color: var(--hyrox-charcoal);
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin-bottom: 0.75rem;
+    margin-top: 1rem;
+}
+
+.info-section p {
+    color: #1e293b;
+    line-height: 1.8;
+    margin-bottom: 1rem;
+}
+
+.info-section a {
+    color: var(--hyrox-orange);
+    text-decoration: underline;
+    font-weight: 500;
+}
+
+.info-section a:hover {
+    color: var(--hyrox-amber);
+}
+
+.workout-list {
+    list-style: none;
+    padding: 0;
+    margin: 1.5rem 0;
+}
+
+.workout-list li {
+    padding: 0.75rem 0;
+    border-bottom: 1px solid #e2e8f0;
+    color: #1e293b;
+    line-height: 1.6;
+}
+
+.workout-list li:last-child {
+    border-bottom: none;
+}
+
+.steps {
+    display: grid;
+    gap: 1.5rem;
+    margin-top: 2rem;
+}
+
+.step {
+    display: flex;
+    gap: 1.5rem;
+    align-items: flex-start;
+    padding: 1.5rem;
+    background: #f8fafc;
+    border-radius: 0.75rem;
+    border: 1px solid #e2e8f0;
+    transition: all 0.2s;
+}
+
+.step:hover {
+    border-color: var(--hyrox-orange);
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+.step-number {
+    flex-shrink: 0;
+    width: 3rem;
+    height: 3rem;
+    background: var(--hyrox-orange);
+    color: var(--hyrox-charcoal);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    font-weight: 700;
+}
+
+.step-content h3 {
+    margin-top: 0;
+    margin-bottom: 0.5rem;
+    color: var(--hyrox-charcoal);
+}
+
+.step-content p {
+    margin-bottom: 0;
+    color: #64748b;
+}
+
+.form-note {
+    margin-top: 0.75rem;
+    font-size: 0.875rem;
+    color: #64748b;
+    text-align: center;
+    font-style: italic;
+}
+
+.example-roast {
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 0.75rem;
+    padding: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.example-header {
+    margin-bottom: 1rem;
+    padding-bottom: 1rem;
+    border-bottom: 2px solid var(--hyrox-orange);
+}
+
+.example-header h3 {
+    color: var(--hyrox-orange);
+    margin-bottom: 0.75rem;
+    font-size: 1.25rem;
+}
+
+.example-stats {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+    font-size: 0.875rem;
+}
+
+.example-stats span {
+    background: white;
+    padding: 0.5rem 0.75rem;
+    border-radius: 0.5rem;
+    border: 1px solid #e2e8f0;
+    color: var(--hyrox-charcoal);
+    font-weight: 600;
+}
+
+.roast-text.example {
+    background: #fffbeb;
+    border-left: 4px solid var(--hyrox-orange);
+    padding: 1.5rem;
+    border-radius: 0.5rem;
+    font-size: 1.0625rem;
+    line-height: 1.75;
+    color: #1e293b;
+    white-space: pre-wrap;
+    border: 1px solid #fef3c7;
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+    margin-top: 1rem;
+}
+
+.faq-list {
+    display: grid;
+    gap: 1.5rem;
+    margin-top: 1.5rem;
+}
+
+.faq-item {
+    background: #f8fafc;
+    padding: 1.5rem;
+    border-radius: 0.75rem;
+    border: 1px solid #e2e8f0;
+    transition: all 0.2s;
+}
+
+.faq-item:hover {
+    border-color: var(--hyrox-orange);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.faq-item h3 {
+    color: var(--hyrox-orange);
+    margin-top: 0;
+    margin-bottom: 0.75rem;
+    font-size: 1.125rem;
+}
+
+.faq-item p {
+    margin-bottom: 0;
+    color: #1e293b;
+    line-height: 1.7;
+}
+
+.faq-item code {
+    background: #e2e8f0;
+    padding: 0.125rem 0.375rem;
+    border-radius: 0.25rem;
+    font-size: 0.875em;
+    color: var(--hyrox-charcoal);
+    font-family: 'Courier New', monospace;
 }
 
 .input-section {
@@ -382,6 +624,29 @@ footer {
     margin-top: 3rem;
 }
 
+.footer-links {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    margin-top: 0.75rem;
+    flex-wrap: wrap;
+}
+
+.footer-link {
+    color: rgba(255, 255, 255, 0.8);
+    text-decoration: underline;
+    transition: color 0.2s;
+}
+
+.footer-link:hover {
+    color: var(--hyrox-orange);
+}
+
+.footer-separator {
+    color: rgba(255, 255, 255, 0.5);
+}
+
 .hidden {
     display: none;
 }
@@ -430,12 +695,45 @@ footer {
         padding: 2rem 1rem;
     }
     
+    .logo {
+        max-width: 150px;
+        margin-bottom: 1rem;
+    }
+    
     header h1 {
         font-size: 1.875rem;
     }
     
     .subtitle {
         font-size: 1rem;
+    }
+    
+    .info-section {
+        padding: 1.5rem;
+    }
+    
+    .info-section h2 {
+        font-size: 1.5rem;
+    }
+    
+    .step {
+        flex-direction: column;
+        gap: 1rem;
+    }
+    
+    .step-number {
+        width: 2.5rem;
+        height: 2.5rem;
+        font-size: 1.25rem;
+    }
+    
+    .example-stats {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+    
+    .example-stats span {
+        width: 100%;
     }
     
     .main-content-wrapper {
@@ -511,12 +809,38 @@ footer {
         font-size: 1.5rem;
     }
     
+    .logo {
+        max-width: 120px;
+    }
+    
     .roast-text {
         padding: 1rem;
         font-size: 1rem;
     }
     
+    .roast-text.example {
+        padding: 1rem;
+        font-size: 0.9375rem;
+    }
+    
     .sidebar-content {
         padding: 1rem;
+    }
+    
+    .info-section {
+        padding: 1rem;
+    }
+    
+    .info-section h2 {
+        font-size: 1.25rem;
+    }
+    
+    .footer-links {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+    
+    .footer-separator {
+        display: none;
     }
 }
