@@ -1,40 +1,20 @@
 // Load images
 let backgroundImage = null;
-let logoImage = null;
 
 // Preload images
 function loadImages() {
     return new Promise((resolve, reject) => {
-        let loaded = 0;
-        const total = 2;
-        
         const bgImg = new Image();
         bgImg.crossOrigin = 'anonymous';
         bgImg.onload = () => {
             backgroundImage = bgImg;
-            loaded++;
-            if (loaded === total) resolve();
+            resolve();
         };
         bgImg.onerror = () => {
             console.warn('Failed to load background image');
-            loaded++;
-            if (loaded === total) resolve();
+            resolve();
         };
-        bgImg.src = 'insta hyrox background.png';
-        
-        const logoImg = new Image();
-        logoImg.crossOrigin = 'anonymous';
-        logoImg.onload = () => {
-            logoImage = logoImg;
-            loaded++;
-            if (loaded === total) resolve();
-        };
-        logoImg.onerror = () => {
-            console.warn('Failed to load logo image');
-            loaded++;
-            if (loaded === total) resolve();
-        };
-        logoImg.src = 'logo.png';
+        bgImg.src = 'insta background with logo.png';
     });
 }
 
@@ -91,13 +71,7 @@ function generateShareCardImage(data, format = 'stories') {
         ctx.fillRect(0, 0, width, height);
     }
     
-    // Draw logo in top-left corner
-    if (logoImage && logoImage.complete) {
-        const logoSize = isStories ? 120 : 100;
-        const logoX = 40;
-        const logoY = 40;
-        ctx.drawImage(logoImage, logoX, logoY, logoSize, logoSize);
-    }
+    // Note: Logo is already included in the background image
     
     // Use modern font stack
     const modernFont = '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif';

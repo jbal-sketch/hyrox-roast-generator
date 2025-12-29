@@ -154,6 +154,11 @@ header h1 {
     box-shadow: none;
 }
 
+.input-section.header-form .submit-btn.loading-state {
+    position: relative;
+    pointer-events: none;
+}
+
 main {
     padding: 0;
 }
@@ -474,6 +479,23 @@ main {
     box-shadow: none;
 }
 
+.submit-btn.loading-state {
+    position: relative;
+    pointer-events: none;
+}
+
+.button-spinner {
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    border: 2px solid rgba(31, 41, 55, 0.3);
+    border-top: 2px solid var(--hyrox-charcoal);
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+    margin-right: 8px;
+    vertical-align: middle;
+}
+
 /* Legacy ID selectors for backwards compatibility */
 #hyroxUrl {
     flex: 1;
@@ -530,6 +552,11 @@ main {
 .loading {
     text-align: center;
     padding: 3rem 1.5rem;
+    background: white;
+    border-radius: 0.75rem;
+    margin: 2rem 0;
+    border: 1px solid #e2e8f0;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
 }
 
 .spinner {

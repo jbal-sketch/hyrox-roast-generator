@@ -45,13 +45,22 @@ forms.forEach((form, index) => {
             return;
         }
         
+        // Show loading spinner immediately on button
+        submitBtns.forEach(btn => {
+            btn.disabled = true;
+            const originalText = btn.textContent;
+            btn.dataset.originalText = originalText;
+            btn.innerHTML = '<span class="button-spinner"></span> Loading...';
+            btn.classList.add('loading-state');
+        });
+        
         // Hide previous results and errors
         results.classList.add('hidden');
         error.classList.add('hidden');
         loading.classList.remove('hidden');
         
-        // Disable all submit buttons
-        submitBtns.forEach(btn => btn.disabled = true);
+        // Scroll to loading element
+        loading.scrollIntoView({ behavior: 'smooth', block: 'center' });
         
         // Generate roast directly (ads are in sidebar)
         generateRoast(url);
@@ -82,8 +91,15 @@ async function generateRoast(url) {
         showError(err.message || 'Something went wrong. Please try again.');
     } finally {
         loading.classList.add('hidden');
-        // Re-enable all submit buttons
-        submitBtns.forEach(btn => btn.disabled = false);
+        // Re-enable all submit buttons and restore original text
+        submitBtns.forEach(btn => {
+            btn.disabled = false;
+            btn.classList.remove('loading-state');
+            if (btn.dataset.originalText) {
+                btn.textContent = btn.dataset.originalText;
+                delete btn.dataset.originalText;
+            }
+        });
     }
 }
 
@@ -91,8 +107,15 @@ function showError(message) {
     error.textContent = message;
     error.classList.remove('hidden');
     loading.classList.add('hidden');
-    // Re-enable all submit buttons
-    submitBtns.forEach(btn => btn.disabled = false);
+    // Re-enable all submit buttons and restore original text
+    submitBtns.forEach(btn => {
+        btn.disabled = false;
+        btn.classList.remove('loading-state');
+        if (btn.dataset.originalText) {
+            btn.textContent = btn.dataset.originalText;
+            delete btn.dataset.originalText;
+        }
+    });
 }
 
 function displayResults(data) {
