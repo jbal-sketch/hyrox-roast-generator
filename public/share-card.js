@@ -1,102 +1,188 @@
-function generateShareCardImage(data) {
+// Load images
+let backgroundImage = null;
+let logoImage = null;
+
+// Preload images
+function loadImages() {
+    return new Promise((resolve, reject) => {
+        let loaded = 0;
+        const total = 2;
+        
+        const bgImg = new Image();
+        bgImg.crossOrigin = 'anonymous';
+        bgImg.onload = () => {
+            backgroundImage = bgImg;
+            loaded++;
+            if (loaded === total) resolve();
+        };
+        bgImg.onerror = () => {
+            console.warn('Failed to load background image');
+            loaded++;
+            if (loaded === total) resolve();
+        };
+        bgImg.src = 'insta hyrox background.png';
+        
+        const logoImg = new Image();
+        logoImg.crossOrigin = 'anonymous';
+        logoImg.onload = () => {
+            logoImage = logoImg;
+            loaded++;
+            if (loaded === total) resolve();
+        };
+        logoImg.onerror = () => {
+            console.warn('Failed to load logo image');
+            loaded++;
+            if (loaded === total) resolve();
+        };
+        logoImg.src = 'logo.png';
+    });
+}
+
+// Initialize images on page load
+loadImages();
+
+function generateShareCardImage(data, format = 'stories') {
     const canvas = document.getElementById('shareCard');
     const ctx = canvas.getContext('2d');
     
-    // Set canvas size (optimized for Instagram square posts: 1080x1080)
+    // Set canvas size based on format
+    const isStories = format === 'stories';
     const width = 1080;
-    const height = 1080;
+    const height = isStories ? 1920 : 1080;
     canvas.width = width;
     canvas.height = height;
     
-    // Background gradient
-    const gradient = ctx.createLinearGradient(0, 0, width, height);
-    gradient.addColorStop(0, '#1F2937');
-    gradient.addColorStop(1, '#111827');
-    ctx.fillStyle = gradient;
-    ctx.fillRect(0, 0, width, height);
+    // Clear canvas
+    ctx.clearRect(0, 0, width, height);
     
-    // Add pattern overlay
-    ctx.fillStyle = 'rgba(255, 255, 255, 0.05)';
-    for (let i = 0; i < width; i += 50) {
-        for (let j = 0; j < height; j += 50) {
-            ctx.fillRect(i, j, 1, 1);
+    // Draw background image
+    if (backgroundImage && backgroundImage.complete) {
+        // Calculate scaling to cover entire canvas
+        const imgAspect = backgroundImage.width / backgroundImage.height;
+        const canvasAspect = width / height;
+        
+        let drawWidth, drawHeight, drawX, drawY;
+        
+        if (imgAspect > canvasAspect) {
+            // Image is wider - fit height
+            drawHeight = height;
+            drawWidth = height * imgAspect;
+            drawX = (width - drawWidth) / 2;
+            drawY = 0;
+        } else {
+            // Image is taller - fit width
+            drawWidth = width;
+            drawHeight = width / imgAspect;
+            drawX = 0;
+            drawY = (height - drawHeight) / 2;
         }
+        
+        ctx.drawImage(backgroundImage, drawX, drawY, drawWidth, drawHeight);
+        
+        // Add dark overlay for text readability
+        ctx.fillStyle = 'rgba(0, 0, 0, 0.5)';
+        ctx.fillRect(0, 0, width, height);
+    } else {
+        // Fallback gradient background
+        const gradient = ctx.createLinearGradient(0, 0, width, height);
+        gradient.addColorStop(0, '#1F2937');
+        gradient.addColorStop(1, '#111827');
+        ctx.fillStyle = gradient;
+        ctx.fillRect(0, 0, width, height);
     }
     
-    // Title
-    ctx.fillStyle = '#FF6B35';
-    ctx.font = 'bold 56px Arial';
+    // Draw logo in top-right corner
+    if (logoImage && logoImage.complete) {
+        const logoSize = isStories ? 120 : 100;
+        const logoX = width - logoSize - 40;
+        const logoY = 40;
+        ctx.drawImage(logoImage, logoX, logoY, logoSize, logoSize);
+    }
+    
+    // Title text (above banner)
+    const title = data.title || 'HYROX ROAST';
+    ctx.fillStyle = '#FFFFFF';
+    ctx.font = `bold ${isStories ? 60 : 50}px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif`;
     ctx.textAlign = 'center';
     ctx.textBaseline = 'top';
-    ctx.fillText('🔥 HYROX ROAST 🔥', width / 2, 50);
+    const titleY = isStories ? 80 : 60;
+    ctx.fillText(title, width / 2, titleY);
     
-    // Athlete name
-    ctx.fillStyle = '#FFFFFF';
-    ctx.font = 'bold 44px Arial';
-    const athleteName = data.data.athleteName || 'Unknown Athlete';
-    ctx.fillText(athleteName, width / 2, 130);
+    // Yellow banner with finish time
+    const bannerHeight = isStories ? 120 : 100;
+    const bannerY = isStories ? 180 : 150;
+    ctx.fillStyle = '#FFD700'; // Yellow
+    ctx.fillRect(0, bannerY, width, bannerHeight);
     
-    // Stats section
-    ctx.fillStyle = '#FF8C42';
-    ctx.font = '32px Arial';
-    const statsY = 200;
-    const stats = [
-        `Time: ${data.data.totalTime || 'N/A'}`
-    ];
-    
-    stats.forEach((stat, index) => {
-        ctx.fillText(stat, width / 2, statsY + (index * 45));
-    });
-    
-    // Divider line
-    ctx.strokeStyle = '#FF6B35';
-    ctx.lineWidth = 3;
-    ctx.beginPath();
-    ctx.moveTo(80, 260);
-    ctx.lineTo(width - 80, 260);
-    ctx.stroke();
-    
-    // Roast text - show full text, no truncation
-    ctx.fillStyle = '#FFFFFF';
+    // Finish time text on banner
+    const finishTime = data.data.totalTime || 'N/A';
+    ctx.fillStyle = '#000000';
+    ctx.font = `bold ${isStories ? 64 : 52}px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif`;
     ctx.textAlign = 'center';
-    ctx.textBaseline = 'top';
+    ctx.textBaseline = 'middle';
+    ctx.fillText(`FINISH TIME: ${finishTime}`, width / 2, bannerY + bannerHeight / 2);
     
-    const roastText = data.roast;
+    // Roast text below banner
+    const roastText = data.roast || '';
     const maxWidth = width - 160; // Padding on both sides
-    const availableHeight = height - 320; // Space from divider to footer
+    const startY = bannerY + bannerHeight + (isStories ? 60 : 50);
+    const availableHeight = height - startY - (isStories ? 100 : 80); // Space for footer
+    
+    // Use modern font stack
+    const modernFont = '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif';
     
     // Start with a font size and adjust if needed
-    let fontSize = 28;
-    let lineHeight = 38;
-    let lines = [];
+    let fontSize = isStories ? 36 : 28;
+    let lineHeight = fontSize + 10;
+    let paragraphSpacing = 20;
+    let allLines = [];
+    
+    // Split text into paragraphs
+    const paragraphs = roastText.split(/\n\s*\n/).filter(p => p.trim().length > 0);
+    if (paragraphs.length === 0) {
+        paragraphs.push(roastText);
+    }
     
     // Try to fit the text, reducing font size if necessary
     let attempts = 0;
-    while (attempts < 3) {
-        ctx.font = `${fontSize}px Arial`;
+    while (attempts < 5) {
+        ctx.font = `${fontSize}px ${modernFont}`;
         lineHeight = fontSize + 10;
-        lines = [];
-        let currentLine = '';
-        const words = roastText.split(' ');
+        paragraphSpacing = Math.max(16, fontSize * 0.7);
+        allLines = [];
         
-        // Word wrap the full text
-        words.forEach(word => {
-            const testLine = currentLine + (currentLine ? ' ' : '') + word;
-            const metrics = ctx.measureText(testLine);
+        // Process each paragraph separately
+        paragraphs.forEach((paragraph, paraIndex) => {
+            const words = paragraph.trim().split(/\s+/);
+            let currentLine = '';
             
-            if (metrics.width > maxWidth && currentLine) {
-                lines.push(currentLine);
-                currentLine = word;
-            } else {
-                currentLine = testLine;
+            // Word wrap each paragraph
+            words.forEach(word => {
+                const testLine = currentLine + (currentLine ? ' ' : '') + word;
+                const metrics = ctx.measureText(testLine);
+                
+                if (metrics.width > maxWidth && currentLine) {
+                    allLines.push({ text: currentLine, isParagraphBreak: false });
+                    currentLine = word;
+                } else {
+                    currentLine = testLine;
+                }
+            });
+            
+            if (currentLine) {
+                allLines.push({ text: currentLine, isParagraphBreak: false });
+            }
+            
+            // Add paragraph spacing (except after last paragraph)
+            if (paraIndex < paragraphs.length - 1) {
+                allLines.push({ text: '', isParagraphBreak: true });
             }
         });
         
-        if (currentLine) {
-            lines.push(currentLine);
-        }
-        
-        const totalTextHeight = lines.length * lineHeight;
+        // Calculate total height including paragraph spacing
+        const totalTextHeight = allLines.reduce((sum, line) => {
+            return sum + (line.isParagraphBreak ? paragraphSpacing : lineHeight);
+        }, 0);
         
         // If text fits, break; otherwise reduce font size
         if (totalTextHeight <= availableHeight || fontSize <= 20) {
@@ -107,22 +193,31 @@ function generateShareCardImage(data) {
         attempts++;
     }
     
-    // Calculate starting Y position to center the text vertically
-    const totalTextHeight = lines.length * lineHeight;
-    const startY = Math.max(300, 280 + Math.max(0, (availableHeight - totalTextHeight) / 2));
+    // Recalculate lineHeight and paragraphSpacing with final fontSize
+    lineHeight = fontSize + 10;
+    paragraphSpacing = Math.max(16, fontSize * 0.7);
     
-    // Display all lines (no truncation)
-    lines.forEach((line, index) => {
-        const y = startY + (index * lineHeight);
-        // Make sure we don't go past the footer area
-        if (y < height - 80) {
-            ctx.fillText(line, width / 2, y);
+    // Draw all lines
+    ctx.fillStyle = '#FFFFFF';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'top';
+    let currentY = startY;
+    
+    allLines.forEach((line) => {
+        if (line.isParagraphBreak) {
+            currentY += paragraphSpacing;
+        } else {
+            if (currentY < height - 80) {
+                ctx.fillText(line.text, width / 2, currentY);
+                currentY += lineHeight;
+            }
         }
     });
     
     // Footer
-    ctx.fillStyle = '#FF8C42';
-    ctx.font = '22px Arial';
-    ctx.fillText('Get your roast at hyroxroast.com', width / 2, height - 50);
+    ctx.fillStyle = '#FFFFFF';
+    ctx.font = `${isStories ? 24 : 20}px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif`;
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'bottom';
+    ctx.fillText('Get your roast at hyroxroast.com', width / 2, height - 30);
 }
-

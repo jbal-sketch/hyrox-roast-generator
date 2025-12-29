@@ -127,11 +127,7 @@
                             </div>
                         </div>
                         <div class="roast-text example">
-                            Well, well, well! Look who decided to show up and actually finish a Hyrox race! 👏 Your 1:40:32 finish time tells a story of determination, grit, and probably a few moments where you questioned all your life choices. 
-
-                            Finishing #1032 out of 1481 means you beat 449 people, which is... something! And #81 in your age group? That's respectable! Your Burpee Broad Jump at 8:27 was clearly the moment you discovered muscles you didn't know existed. The Sandbag Lunges at 6:56 probably felt like an eternity, but hey, you made it through! 💪
-
-                            The best part? You finished. That's more than most people can say. Now go share this and let everyone know you're officially a Hyrox finisher! 🔥
+                            Well, well, well! Your 1:40:32 finish time tells a story of determination, grit, and probably a few moments where you questioned all your life choices. Finishing #1032 out of 1481 means you beat 449 people - that's something! Your Burpee Broad Jump at 8:27 was clearly the moment you discovered muscles you didn't know existed. The best part? You finished. That's more than most people can say! 💪🔥
                         </div>
                     </div>
 
@@ -145,11 +141,7 @@
                             </div>
                         </div>
                         <div class="roast-text example">
-                            Oh look, we've got a speed demon over here! 🚀 Finishing in 58:45 and landing #12 overall? That's impressive... almost TOO impressive. Are you sure you didn't accidentally skip a round? 😏
-
-                            #3 in your age group means you're either incredibly fit or you have a questionable relationship with rest days. Your splits show you clearly know what you're doing - probably because you've done this more than once. The consistency is showing! 
-
-                            But let's be real: finishing in the top 15 means you're either a machine or you need to find a hobby that doesn't involve so much suffering. Either way, respect! Now go flex on social media - you've earned it! 💪🔥
+                            Speed demon alert! 🚀 Finishing in 58:45 and landing #12 overall? That's impressive... almost TOO impressive. Are you sure you didn't accidentally skip a round? 😏 #3 in your age group means you're either incredibly fit or you have a questionable relationship with rest days. Either way, respect! Now go flex on social media - you've earned it! 💪🔥
                         </div>
                     </div>
                 </section>
@@ -235,6 +227,22 @@
 
                     <div class="share-section">
                         <h3>Share Your Roast:</h3>
+                        
+                        <!-- Format Selector -->
+                        <div class="format-selector">
+                            <label>Image Format:</label>
+                            <div class="format-options">
+                                <label class="format-option">
+                                    <input type="radio" name="imageFormat" value="stories" checked>
+                                    <span>Instagram Stories (1080x1920)</span>
+                                </label>
+                                <label class="format-option">
+                                    <input type="radio" name="imageFormat" value="square">
+                                    <span>Square Post (1080x1080)</span>
+                                </label>
+                            </div>
+                        </div>
+                        
                         <div class="share-buttons">
                             <button id="downloadImage" class="share-btn">📥 Download Image</button>
                             <button id="copyText" class="share-btn">📋 Copy Text</button>
@@ -243,6 +251,15 @@
                         </div>
                         <div id="shareCardContainer" class="share-card-container">
                             <canvas id="shareCard" class="share-card"></canvas>
+                        </div>
+                        
+                        <!-- Hashtags Section -->
+                        <div class="hashtags-section">
+                            <h4>Suggested Hashtags:</h4>
+                            <div class="hashtags-display">
+                                <p id="hashtagsText" class="hashtags-text"></p>
+                            </div>
+                            <button id="copyHashtags" class="share-btn">📋 Copy Hashtags</button>
                         </div>
                     </div>
                 </div>

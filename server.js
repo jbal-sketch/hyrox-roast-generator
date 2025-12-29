@@ -214,24 +214,42 @@ function generatePrompt(data) {
 ATHLETE PERFORMANCE DATA:
 - Name: ${data.athleteName}
 - Total Time: ${data.totalTime}
-- Overall Position: #${data.overallPosition} (out of all competitors)
-- Category Position: #${data.categoryPosition} (in their category)
+- Overall Position: #${data.overallPosition}
+- Category Position: #${data.categoryPosition}
 
 WORKOUT SPLITS:
 ${splitsText}
 ${slowestText}
 
-INSTRUCTIONS:
-1. Create a humorous, playful roast (2-3 short paragraphs)
-2. Be witty and funny, but keep it light-hearted and constructive
-3. Point out interesting aspects like slowest splits, position relative to field size
-4. Make playful jokes about their performance - like a friendly banter between training partners
-5. Keep it shareable and entertaining for social media
+INSTRUCTIONS FOR ROAST:
+1. Create a humorous, playful roast that is SHORT and punchy (100-120 words MAX, 2-3 sentences)
+2. Focus on quick one-liners and snappy humor - perfect for Instagram Stories
+3. Point out interesting aspects like slowest splits, finish time, or position
+4. Make playful jokes - like friendly banter between training partners
+5. Keep it shareable and entertaining for social media - mobile-friendly and quick to read
 6. Don't be mean-spirited or overly harsh - this should be fun and motivating
-7. Use emojis sparingly (1-2 max) if it adds to the humor
+7. Use emojis naturally (2-3 emojis total) - sprinkle them for personality
 8. Make it feel like a friendly roast from a fellow athlete who's been there
+9. Be punchy and get to the point quickly - Instagram users scroll fast!
 
-Generate the roast now:`;
+INSTRUCTIONS FOR TITLE:
+Create a short, catchy title (3-5 words) that matches the roast tone. Examples: "WELL, WELL, WELL!", "SPEED DEMON ALERT", "FINISHER VIBES", "RESPECT THE GRIND", "YOU DID IT!". Make it playful and attention-grabbing.
+
+INSTRUCTIONS FOR HASHTAGS:
+Generate 8-12 relevant hashtags. Include a mix of:
+- Hyrox-specific: #hyrox #hyroxrace #hyroxathlete #hyroxfinisher
+- Fitness: #functionalfitness #fitness #crossfit #endurance
+- Humor: #roast #roastme #fitnesshumor
+- Engagement: #motivation #fitspo #workout #training
+
+Format your response as JSON with three fields:
+{
+  "title": "YOUR TITLE HERE",
+  "roast": "YOUR ROAST TEXT HERE",
+  "hashtags": "#hashtag1 #hashtag2 #hashtag3 ..."
+}
+
+Generate the response now:`;
 }
 
 // Generate roast using Gemini
@@ -240,7 +258,31 @@ async function generateRoast(prompt) {
     const model = genAI.getGenerativeModel({ model: 'gemini-2.5-flash' });
     const result = await model.generateContent(prompt);
     const response = await result.response;
-    return response.text();
+    const text = response.text();
+    
+    // Try to parse JSON response
+    try {
+      // Extract JSON from response (might have markdown code blocks)
+      const jsonMatch = text.match(/\{[\s\S]*\}/);
+      if (jsonMatch) {
+        const parsed = JSON.parse(jsonMatch[0]);
+        return {
+          title: parsed.title || 'HYROX ROAST',
+          roast: parsed.roast || text,
+          hashtags: parsed.hashtags || '#hyrox #hyroxrace #fitness #roast'
+        };
+      }
+    } catch (parseError) {
+      // If JSON parsing fails, return default structure
+      console.warn('Failed to parse JSON response, using fallback');
+    }
+    
+    // Fallback: return text as roast with default title and hashtags
+    return {
+      title: 'HYROX ROAST',
+      roast: text,
+      hashtags: '#hyrox #hyroxrace #functionalfitness #fitness #roast #roastme #motivation #fitspo #workout #training'
+    };
   } catch (error) {
     throw new Error(`Failed to generate roast: ${error.message}`);
   }
@@ -269,14 +311,16 @@ app.post('/api/roast', async (req, res) => {
     // Generate prompt
     const prompt = generatePrompt(resultsData);
     
-    // Generate roast
-    const roast = await generateRoast(prompt);
+    // Generate roast (now returns object with title, roast, hashtags)
+    const roastData = await generateRoast(prompt);
     
     // Return data
     res.json({
       success: true,
       data: resultsData,
-      roast,
+      title: roastData.title,
+      roast: roastData.roast,
+      hashtags: roastData.hashtags,
       prompt
     });
     

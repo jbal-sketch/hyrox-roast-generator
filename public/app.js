@@ -103,6 +103,16 @@ function displayResults(data) {
     // Display roast
     document.getElementById('roastText').textContent = data.roast;
     
+    // Display title if available
+    if (data.title && document.getElementById('roastTitle')) {
+        document.getElementById('roastTitle').textContent = data.title;
+    }
+    
+    // Display hashtags if available
+    if (data.hashtags && document.getElementById('hashtagsText')) {
+        document.getElementById('hashtagsText').textContent = data.hashtags;
+    }
+    
     // Setup sharing buttons (this will also generate the share card)
     setupSharing(data);
     
@@ -115,12 +125,14 @@ function displayResults(data) {
 
 // Store current sharing data
 let currentShareData = null;
+let currentFormat = 'stories'; // Default to stories format
 
 function setupSharing(data) {
     currentShareData = data;
     const roastText = data.roast;
     const athleteName = data.data.athleteName || 'Unknown Athlete';
-    const shareText = `${athleteName}'s Hyrox Roast:\n\n${roastText}\n\n🔥 Get your own roast at: ${window.location.href}`;
+    const hashtags = data.hashtags || '';
+    const shareText = `${athleteName}'s Hyrox Roast:\n\n${roastText}\n\n${hashtags}\n\n🔥 Get your own roast at: ${window.location.href}`;
     
     // Remove old listeners by cloning and replacing elements
     const copyBtn = document.getElementById('copyText');
@@ -130,6 +142,35 @@ function setupSharing(data) {
     const downloadBtn = document.getElementById('downloadImage');
     const newDownloadBtn = downloadBtn.cloneNode(true);
     downloadBtn.parentNode.replaceChild(newDownloadBtn, downloadBtn);
+    
+    const copyHashtagsBtn = document.getElementById('copyHashtags');
+    if (copyHashtagsBtn) {
+        const newCopyHashtagsBtn = copyHashtagsBtn.cloneNode(true);
+        copyHashtagsBtn.parentNode.replaceChild(newCopyHashtagsBtn, copyHashtagsBtn);
+        
+        // Copy hashtags button
+        newCopyHashtagsBtn.addEventListener('click', () => {
+            navigator.clipboard.writeText(hashtags).then(() => {
+                const originalText = newCopyHashtagsBtn.textContent;
+                newCopyHashtagsBtn.textContent = '✓ Copied!';
+                setTimeout(() => {
+                    newCopyHashtagsBtn.textContent = originalText;
+                }, 2000);
+            }).catch(err => {
+                console.error('Failed to copy:', err);
+                showError('Failed to copy to clipboard');
+            });
+        });
+    }
+    
+    // Format selector
+    const formatSelectors = document.querySelectorAll('input[name="imageFormat"]');
+    formatSelectors.forEach(selector => {
+        selector.addEventListener('change', (e) => {
+            currentFormat = e.target.value;
+            regenerateImage();
+        });
+    });
     
     // Copy text button
     newCopyBtn.addEventListener('click', () => {
@@ -159,7 +200,8 @@ function setupSharing(data) {
         if (canvas && canvas.width > 0) {
             const url = canvas.toDataURL('image/png');
             const link = document.createElement('a');
-            link.download = `hyrox-roast-${athleteName.replace(/\s+/g, '-')}.png`;
+            const formatSuffix = currentFormat === 'stories' ? '-stories' : '-square';
+            link.download = `hyrox-roast-${athleteName.replace(/\s+/g, '-')}${formatSuffix}.png`;
             link.href = url;
             link.click();
         } else {
@@ -167,10 +209,19 @@ function setupSharing(data) {
         }
     });
     
-    // Generate share card (with slight delay to ensure DOM is ready)
+    // Generate share card (with slight delay to ensure DOM is ready and images loaded)
     setTimeout(() => {
-        if (typeof generateShareCardImage === 'function') {
-            generateShareCardImage(data);
+        regenerateImage();
+    }, 200);
+}
+
+function regenerateImage() {
+    if (currentShareData && typeof generateShareCardImage === 'function') {
+        generateShareCardImage(currentShareData, currentFormat);
+        // Update container data attribute for styling
+        const container = document.getElementById('shareCardContainer');
+        if (container) {
+            container.setAttribute('data-format', currentFormat);
         }
-    }, 100);
+    }
 }

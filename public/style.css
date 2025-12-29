@@ -731,9 +731,109 @@ main {
 
 .share-card {
     max-width: 100%;
+    width: 100%;
     height: auto;
     border-radius: 0.5rem;
     box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    display: block;
+    margin: 0 auto;
+}
+
+/* For Stories format, maintain aspect ratio */
+.share-card-container[data-format="stories"] .share-card {
+    max-width: 540px; /* Half of 1080 for better mobile display */
+}
+
+.format-selector {
+    margin-bottom: 2rem;
+    padding: 1.5rem;
+    background: #f8fafc;
+    border-radius: 0.75rem;
+    border: 1px solid #e2e8f0;
+}
+
+.format-selector label:first-child {
+    display: block;
+    font-weight: 600;
+    color: var(--hyrox-charcoal);
+    margin-bottom: 1rem;
+    font-size: 1rem;
+}
+
+.format-options {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+.format-option {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    cursor: pointer;
+    padding: 0.75rem 1rem;
+    background: white;
+    border: 2px solid #e2e8f0;
+    border-radius: 0.5rem;
+    transition: all 0.2s;
+    flex: 1;
+    min-width: 200px;
+}
+
+.format-option:hover {
+    border-color: var(--hyrox-orange);
+    background: #fff7ed;
+}
+
+.format-option input[type="radio"] {
+    margin: 0;
+    cursor: pointer;
+    accent-color: var(--hyrox-orange);
+}
+
+.format-option input[type="radio"]:checked + span {
+    font-weight: 600;
+    color: var(--hyrox-orange);
+}
+
+.format-option:has(input[type="radio"]:checked) {
+    border-color: var(--hyrox-orange);
+    background: #fff7ed;
+}
+
+.format-option span {
+    color: var(--hyrox-charcoal);
+    font-size: 0.9375rem;
+}
+
+.hashtags-section {
+    margin-top: 2rem;
+    padding: 1.5rem;
+    background: #f8fafc;
+    border-radius: 0.75rem;
+    border: 1px solid #e2e8f0;
+}
+
+.hashtags-section h4 {
+    color: var(--hyrox-charcoal);
+    margin-bottom: 1rem;
+    font-size: 1.125rem;
+    font-weight: 600;
+}
+
+.hashtags-display {
+    margin-bottom: 1rem;
+}
+
+.hashtags-text {
+    color: var(--hyrox-charcoal);
+    font-size: 0.9375rem;
+    line-height: 1.6;
+    word-break: break-word;
+    padding: 1rem;
+    background: white;
+    border-radius: 0.5rem;
+    border: 1px solid #e2e8f0;
 }
 
 footer {
